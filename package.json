@@ -4,7 +4,8 @@
   "description": "The backend API for the unofficial Gloomhaven Scenario Editor",
   "main": "index.js",
   "scripts": {
-    "test": "test"
+    "test": "test",
+    "build": "babel -w src/ -d build -s"
   },
   "repository": {
     "type": "git",

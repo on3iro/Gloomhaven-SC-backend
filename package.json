@@ -2,9 +2,13 @@
   "name": "gloomhaven_sc_backend",
   "version": "1.0.0",
   "description": "The backend API for the unofficial Gloomhaven Scenario Editor",
-  "main": "index.js",
+  "main": "app.js",
+  "private": true,
   "scripts": {
     "test": "test",
+    "start": "babel-watch src/app.js",
+    "babel": "babel-node",
+    "eslint": "eslint ./",
     "build": "babel -w src/ -d build -s"
   },
   "repository": {
@@ -31,6 +35,9 @@
     "babel-cli": "^6.22.2",
     "babel-preset-env": "^1.1.8",
     "babel-preset-es2015": "^6.22.0",
-    "babel-preset-stage-0": "^6.22.0"
+    "babel-preset-stage-0": "^6.22.0",
+    "babel-watch": "^2.0.6",
+    "eslint": "^3.14.1",
+    "jest": "^18.1.0"
   }
 }

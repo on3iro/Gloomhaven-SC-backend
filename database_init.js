@@ -99,6 +99,12 @@ function createInitialData(connection, db) {
   );
 }
 
+function createRelations(connection, db) {
+  return Promise.all([
+    console.log('reeeelations')
+  ]);
+}
+
 // Establish connection
 let connection = null;
 r.connect( {host: 'localhost', port: 28015}, (err, conn) => {
@@ -106,35 +112,69 @@ r.connect( {host: 'localhost', port: 28015}, (err, conn) => {
   connection = conn;
 }).then(
   () => {
-    // Drop db if exists
-    r.dbDrop('gloomhavenSC').run(connection, (err, result) => {
-      if(err) throw err;
-      console.log(JSON.stringify(result, null, 2));
-    }).then(
-      () => {
+    return new Promise(
+      (resolve, reject) => {
+        // Drop db if exists
+        r.dbDrop('gloomhavenSC').run(connection, (err, result) => {
+          console.log(JSON.stringify(result, null, 2));
+        }).then(
+          () => resolve('drop')
+        ).catch(
+          (err) => {
+            console.log(err);
+            resolve('Did not drop')
+          }
+        );
+      }
+    )
+  }
+).then(
+  (value) => {
+    return new Promise(
+      (resolve, reject) => {
+        console.log(value);
         // Create Database
         r.dbCreate('gloomhavenSC').run(connection, (err, result) => {
           if(err) throw err;
           console.log(JSON.stringify(result, null, 2));
         }).then(
-          () => {
-            let db = r.db('gloomhavenSC');
-
-            createTables(connection, db)
-              .then(
-                values => {
-                  console.log(values);
-                  createInitialData(connection, db)
-                    .then(
-                      values => {
-                        console.log(values);
-                      }
-                    );
-                }
-              );
-          }
+          () => resolve('create')
         );
       }
-    );
+    )
+  }
+).then(
+  (value) => {
+    return new Promise(
+      (resolve, reject) => {
+        console.log(value);
+        let db = r.db('gloomhavenSC');
+
+        createTables(connection, db).then(
+          values => resolve({ values, db })
+        );
+      }
+    )
+  }
+).then(
+  (obj) => {
+    return new Promise(
+      (resolve, reject) => {
+        console.log(obj.values);
+
+        createInitialData(connection, obj.db).then(
+          values => resolve({ values, db: obj.db })
+        );
+      }
+    )
+  }
+).then(
+  (obj) => {
+    return new Promise(
+      (resolve, reject) => {
+        console.log(obj.values);
+        createRelations(connection, obj.db);
+      }
+    )
   }
 );

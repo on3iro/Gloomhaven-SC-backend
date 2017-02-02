@@ -44,7 +44,7 @@ function createInitialData(connection, db) {
         createdAt: r.now(),
         creatorID: '',
         title: 'The awesome dummy campaign',
-        description: 'Only true adventures know how to deal with "The Dummy"...',
+        description: 'Only true adventurers know how to deal with "The Dummy"...',
         introduction: 'Once upon a time...',
         conclusion: '...and "The Dummy" said:...',
         rating: 5,

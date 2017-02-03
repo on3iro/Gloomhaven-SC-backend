@@ -1,4 +1,4 @@
-import { thinky } from './plugins';
+import { thinky } from '../plugins';
 
 const type = thinky.type;
 

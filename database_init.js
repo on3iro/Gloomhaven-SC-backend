@@ -1,21 +1,6 @@
 import { thinky } from './src/plugins';
-import { User } from './src/models';
+import { User } from './src/users/models';
 
-
-
-function createTables(db) {
-  return Promise.all(
-    [
-      db.tableCreate('AssetTypes').run(),
-      db.tableCreate('Assets').run(),
-      db.tableCreate('CampaignComments').run(),
-      db.tableCreate('Campaigns').run(),
-      db.tableCreate('Maps').run(),
-      db.tableCreate('ScenarioComments').run(),
-      db.tableCreate('Scenarios').run(),
-    ]
-  );
-}
 
 function createInitialData(connection, db) {
   return Promise.all(
@@ -94,74 +79,44 @@ function createInitialData(connection, db) {
   );
 }
 
-function createIndices(connection, db) {
-  return Promise.all([
-    db.table('Assets').indexCreate('creatorID').run(connection)
-      .then(
-        val => console.log(val)
-      ),
-    db.table('Assets').indexCreate('typeID').run(connection)
-      .then(
-        val => console.log(val)
-      ),
-    db.table('CampaignComments').indexCreate('campaignID').run(connection)
-      .then(
-        val => console.log(val)
-      ),
-    db.table('CampaignComments').indexCreate('userID').run(connection)
-      .then(
-        val => console.log(val)
-      ),
-    db.table('Campaigns').indexCreate('creatorID').run(connection)
-      .then(
-        val => console.log(val)
-      ),
-    db.table('Maps').indexCreate('scenarioID').run(connection)
-      .then(
-        val => console.log(val)
-      ),
-    db.table('ScenarioComments').indexCreate('scenarioID').run(connection)
-      .then(
-        val => console.log(val)
-      ),
-    db.table('ScenarioComments').indexCreate('userID').run(connection)
-      .then(
-        val => console.log(val)
-      ),
-  ]);
-}
-
-function createRelations(connection, db) {
-  return Promise.all([
-
-  ]);
-}
-
 // -----------------------------------------------------------------------------
 // Query execution
 // -----------------------------------------------------------------------------
 
 thinky.dbReady()
-.then(
-  val => {
-    return new Promise(
+  .then(
+    () => new Promise(
       (resolve, reject) => {
-        console.log(val);
+        const r = thinky.r;
+        const db = r.db('gloomhavenSC');
 
-        const oneiro = new User({
-          name: 'oneiro',
-          mail: 'dev@on3iro.de',
-          password: '123456',
-          createdAt: thinky.r.now(),
-        });
-        console.log(oneiro)
-        oneiro.save().then(
-          doc => {
-            console.log(doc);
-            resolve('Done');
-          }
-        );
+        // Delete all documents if tables already exist
+        const tables = db.tableList().run();
+        tables.map(table => {
+          r.table(table).delete()
+            .then(
+              val => console.log(val)
+            )
+        }).then(
+          () => resolve('done')
+        )
       }
     )
-  }
-);
+  )
+  .then(
+    val => {
+      return new Promise(
+        (resolve, reject) => {
+          console.log(val);
+
+          const foo = new User({
+            name: 'foo',
+            mail: 'foo@bar.com',
+            password: '123456',
+            createdAt: thinky.r.now(),
+          });
+          foo.save().then((val) => console.log(val))
+        }
+      )
+    }
+  );

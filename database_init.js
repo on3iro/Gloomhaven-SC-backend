@@ -1,5 +1,6 @@
 import { thinky } from './src/plugins';
 import { User } from './src/users/models';
+import { DATABASE_NAME } from './src/config';
 
 
 function createInitialData(connection, db) {
@@ -88,18 +89,28 @@ thinky.dbReady()
     () => new Promise(
       (resolve, reject) => {
         const r = thinky.r;
-        const db = r.db('gloomhavenSC');
+        const db = r.db(DATABASE_NAME);
+
+        console.log('Database ready!');
 
         // Delete all documents if tables already exist
-        const tables = db.tableList().run();
-        tables.map(table => {
-          r.table(table).delete()
-            .then(
-              val => console.log(val)
-            )
-        }).then(
-          () => resolve('done')
-        )
+        const tables = db.tableList().run()
+          .then(
+            (tableValues) => {
+              Promise.all(
+                tableValues.map(val => {
+                  return r.table(val).delete().run()
+                    .then(
+                      (doc) => console.log(`Table ${val}:`, doc)
+                    )
+                })
+              )
+            }
+          )
+          .then(
+              () => resolve('Succesfully deleted documents!')
+          )
+          .catch(val => console.log(val))
       }
     )
   )
@@ -108,6 +119,7 @@ thinky.dbReady()
       return new Promise(
         (resolve, reject) => {
           console.log(val);
+          console.log('Creating documents!');
 
           const foo = new User({
             name: 'foo',
@@ -115,8 +127,19 @@ thinky.dbReady()
             password: '123456',
             createdAt: thinky.r.now(),
           });
-          foo.save().then((val) => console.log(val))
+          foo.save().then(
+            (val) => {
+              console.log(val);
+              resolve('Done')
+            }
+          )
         }
       )
+    }
+  )
+  .then(
+    val => {
+      console.log(val);
+      process.exit(0);
     }
   );

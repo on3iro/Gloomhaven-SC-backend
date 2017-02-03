@@ -1,7 +1,9 @@
+import { DATABASE_NAME } from './config';
+
 const thinky = require('thinky')({
   host: 'localhost',
   port: 28015,
-  db: 'gloomhavenSC',
+  db: DATABASE_NAME,
 });
 
 module.exports = {

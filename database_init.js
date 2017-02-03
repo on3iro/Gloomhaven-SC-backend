@@ -1,16 +1,19 @@
-let r = require('rethinkdb');
+import { thinky } from './src/plugins';
+import { User } from './src/models';
 
-function createTables(connection, db) {
+
+
+function createTables(db) {
   return Promise.all(
     [
-      db.tableCreate('AssetTypes').run(connection),
-      db.tableCreate('Assets').run(connection),
-      db.tableCreate('CampaignComments').run(connection),
-      db.tableCreate('Campaigns').run(connection),
-      db.tableCreate('Maps').run(connection),
-      db.tableCreate('ScenarioComments').run(connection),
-      db.tableCreate('Scenarios').run(connection),
-      db.tableCreate('Users').run(connection),
+      db.tableCreate('AssetTypes').run(),
+      db.tableCreate('Assets').run(),
+      db.tableCreate('CampaignComments').run(),
+      db.tableCreate('Campaigns').run(),
+      db.tableCreate('Maps').run(),
+      db.tableCreate('ScenarioComments').run(),
+      db.tableCreate('Scenarios').run(),
+      db.tableCreate('User').run(),
     ]
   );
 }
@@ -88,12 +91,6 @@ function createInitialData(connection, db) {
           {requirement: 'Be cool'},
         ],
       }).run(connection),
-      db.table('Users').insert({
-        name: 'Dude',
-        mail: 'dude@example.com',
-        password: '123456',
-        createdAt: r.now(),
-      }).run(connection),
     ]
   );
 }
@@ -141,94 +138,113 @@ function createRelations(connection, db) {
   ]);
 }
 
+function dropDB(dbName) {
+  return new Promise(
+    (resolve, reject) => {
+      // Drop db if exists
+      thinky.r.dbDrop(dbName).run(null, (err, result) => {
+        console.log(JSON.stringify(result, null, 2));
+      }).then(
+        () => resolve('drop')
+      ).catch(
+        (err) => {
+          console.log(err);
+          resolve('Did not drop')
+        }
+      );
+    }
+  )
+}
 
 // -----------------------------------------------------------------------------
 // Query execution
 // -----------------------------------------------------------------------------
 
 // Establish connection
-let connection = null;
-r.connect( {host: 'localhost', port: 28015}, (err, conn) => {
-  if(err) throw err;
-  connection = conn;
-}).then(
-  () => {
+dropDB('gloomhavenSC')
+  .then(
+    (value) => {
+      return new Promise(
+        (resolve, reject) => {
+          console.log(value);
+
+          // Create Database
+          thinky.r.dbCreate('gloomhavenSC').run(null, (err, result) => {
+            if(err) throw err;
+            console.log(JSON.stringify(result, null, 2));
+          }).then(
+            () => resolve('create')
+          );
+        }
+      )
+    }
+  )
+.then(
+  (value) => {
     return new Promise(
       (resolve, reject) => {
-        // Drop db if exists
-        r.dbDrop('gloomhavenSC').run(connection, (err, result) => {
-          console.log(JSON.stringify(result, null, 2));
-        }).then(
-          () => resolve('drop')
-        ).catch(
-          (err) => {
-            console.log(err);
-            resolve('Did not drop')
+        console.log(value);
+
+        createTables(thinky.r).then(
+          values => resolve(values)
+        );
+      }
+    )
+  }
+)
+.then(
+  val => {
+    return new Promise(
+      (resolve, reject) => {
+        console.log(val);
+
+        const oneiro = new User({
+          name: 'oneiro',
+          mail: 'dev@on3iro.de',
+          password: '123456',
+          createdAt: db.r.now(),
+        });
+        oneiro.save().then(
+          doc => {
+            console.log(doc);
+            resolve('Done');
           }
         );
       }
     )
   }
-).then(
-  (value) => {
-    return new Promise(
-      (resolve, reject) => {
-        console.log(value);
-
-        // Create Database
-        r.dbCreate('gloomhavenSC').run(connection, (err, result) => {
-          if(err) throw err;
-          console.log(JSON.stringify(result, null, 2));
-        }).then(
-          () => resolve('create')
-        );
-      }
-    )
-  }
-).then(
-  (value) => {
-    return new Promise(
-      (resolve, reject) => {
-        console.log(value);
-        let db = r.db('gloomhavenSC');
-
-        createTables(connection, db).then(
-          values => resolve({ values, db })
-        );
-      }
-    )
-  }
-).then(
-  (obj) => {
-    return new Promise(
-      (resolve, reject) => {
-        console.log(obj.values);
-
-        createInitialData(connection, obj.db).then(
-          values => resolve({ values, db: obj.db })
-        );
-      }
-    )
-  }
-).then(
-  (obj) => {
-    return new Promise(
-      (resolve, reject) => {
-        console.log(obj.values);
-
-        createIndices(connection, obj.db).then(
-          () => resolve(obj.db)
-        );
-      }
-    )
-  }
-).then(
-  (db) => {
-    return new Promise(
-      (resolve, reject) => {
-
-        createRelations(connection, db);
-      }
-    )
-  }
 );
+// ).then(
+  // (obj) => {
+    // return new Promise(
+      // (resolve, reject) => {
+        // console.log(obj.values);
+
+        // createInitialData(connection, obj.db).then(
+          // values => resolve({ values, db: obj.db })
+        // );
+      // }
+    // )
+  // }
+// ).then(
+  // (obj) => {
+    // return new Promise(
+      // (resolve, reject) => {
+        // console.log(obj.values);
+
+        // createIndices(connection, obj.db).then(
+          // () => resolve(obj.db)
+        // );
+      // }
+    // )
+  // }
+// ).then(
+  // (db) => {
+    // return new Promise(
+      // (resolve, reject) => {
+
+        // createRelations(connection, db);
+      // }
+    // )
+  // }
+// );

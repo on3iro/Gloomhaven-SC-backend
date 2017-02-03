@@ -9,7 +9,7 @@
     "start": "babel-watch src/app.js",
     "babel": "babel-node",
     "eslint": "eslint ./",
-    "initDB": "babel-node database_init.js",
+    "initDB": "babel-node src/models.js",
     "build": "babel -w src/ -d build -s"
   },
   "repository": {
@@ -30,7 +30,8 @@
   "homepage": "https://github.com/on3iro/Gloomhaven-SC-backend#readme",
   "dependencies": {
     "express": "^4.14.1",
-    "rethinkdb": "^2.3.3"
+    "rethinkdb": "^2.3.3",
+    "thinky": "^2.3.8"
   },
   "devDependencies": {
     "babel-cli": "^6.22.2",

@@ -1,7 +1,10 @@
 import { thinky } from './src/plugins';
 import { User } from './src/users/models';
+import { Scenario } from './src/scenarios/models';
 import { DATABASE_NAME } from './src/config';
 
+
+const r = thinky.r;
 
 function createInitialData(connection, db) {
   return Promise.all(
@@ -58,23 +61,6 @@ function createInitialData(connection, db) {
       }).run(connection),
       db.table('Scenarios').insert({
         createdAt: r.now(),
-        title: "The wolf and the dummy",
-        introduction: "Oh no - wolf... and a dummy",
-        conclusion: "That's it",
-        notes: "Don't play this... seriously",
-        description: "Crazy wolf slaying",
-        rating: 2,
-        public: true,
-        sections: [
-          {title: 'Section One', content: 'Yadayadayada'}
-        ],
-        goals: [
-          {goal: 'Kill all enemies'},
-          {goal: 'Have fun'},
-        ],
-        requirements: [
-          {requirement: 'Be cool'},
-        ],
       }).run(connection),
     ]
   );
@@ -88,7 +74,6 @@ thinky.dbReady()
   .then(
     () => new Promise(
       (resolve, reject) => {
-        const r = thinky.r;
         const db = r.db(DATABASE_NAME);
 
         console.log('Database ready!');
@@ -125,14 +110,51 @@ thinky.dbReady()
             name: 'foo',
             mail: 'foo@bar.com',
             password: '123456',
-            createdAt: thinky.r.now(),
+            createdAt: r.now(),
           });
-          foo.save().then(
-            (val) => {
-              console.log(val);
-              resolve('Done')
-            }
-          )
+
+          const scenario = new Scenario({
+            title: "The wolf and the dummy",
+            introduction: "Oh no - wolf... and a dummy",
+            conclusion: "That's it",
+            notes: "Don't play this... seriously",
+            description: "Crazy wolf slaying",
+            rating: 2,
+            public: true,
+            sections: [
+              {title: 'Section One', content: 'Yadayadayada'}
+            ],
+            goals: [
+              'Kill all enemies!',
+              'Have fun!',
+            ],
+            requirements: [
+              'Be cool',
+            ],
+          });
+
+          foo.save()
+            .then(
+              (val) => {
+                console.log(val);
+                return new Promise(
+                  (resolve, reject) => {
+                    scenario.save().then(
+                      val => {
+                        console.log(val);
+                        resolve('Scenario saved');
+                      }
+                    )
+                  }
+                )
+              }
+            )
+            .then(
+              val => {
+                console.log(val);
+                resolve('Done!')
+              }
+            );
         }
       )
     }

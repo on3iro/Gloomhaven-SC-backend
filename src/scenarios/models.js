@@ -22,3 +22,15 @@ export const Scenario = thinky.createModel('Scenario', {
   goals: [type.string()],
   requirements: [type.string()],
 });
+
+export const ScenarioComment = thinky.createModel('ScenarioComment', {
+  id: type.string(),
+  userID: type.string(),
+  scenarioID: type.string(),
+  createdAt: type.date().default(r.now()),
+  text: type.string(),
+});
+
+// Scenario --< ScenarioComments
+Scenario.hasMany(ScenarioComment, "scenarioComments", "id", "scenarioID");
+ScenarioComment.belongsTo(Scenario, "scenario", "scenarioID", "id");

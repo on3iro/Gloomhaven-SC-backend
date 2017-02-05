@@ -1,5 +1,6 @@
 import { thinky } from '../plugins';
-import { Scenario } from '../scenarios/models';
+import { Scenario, ScenarioComment } from '../scenarios/models';
+import { Campaign, CampaignComment } from '../campaigns/models';
 
 
 const r = thinky.r;
@@ -13,5 +14,18 @@ export const User = thinky.createModel('User', {
   createdAt: type.date().default(r.now()),
 });
 
+// User --< Scenarios
 User.hasMany(Scenario, "scenarios", "id", "userID");
 Scenario.belongsTo(User, "user", "userID", "id");
+
+// User --< ScenarioComments
+User.hasMany(ScenarioComment, "scenarioComments", "id", "userID");
+ScenarioComment.belongsTo(User, "user", "userID", "id");
+
+// User --< Campaigns
+User.hasMany(Campaign, "campaigns", "id", "userID");
+Campaign.belongsTo(User, "user", "userID", "id");
+
+// User --< CampaignComments
+User.hasMany(CampaignComment, "campaignComments", "id", "userID");
+CampaignComment.belongsTo(User, "user", "userID", "id");

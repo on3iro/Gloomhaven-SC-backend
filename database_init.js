@@ -1,6 +1,7 @@
 import { thinky } from './src/plugins';
 import { User } from './src/users/models';
-import { Scenario } from './src/scenarios/models';
+import { Scenario, ScenarioComment } from './src/scenarios/models';
+import { Campaign, CampaignComment } from './src/campaigns/models';
 import { DATABASE_NAME } from './src/config';
 
 
@@ -31,7 +32,8 @@ function createInitialData(connection, db) {
         userID: '',
         text: 'This campaign is awesome'
       }).run(connection),
-      db.table('Campaigns').insert({
+      db.table('Campaigns').insert(
+        {
         createdAt: r.now(),
         creatorID: '',
         title: 'The awesome dummy campaign',
@@ -46,7 +48,8 @@ function createInitialData(connection, db) {
         links: [
           {sourceID: '', source: 'Q1', targetID: '', target: 'Q2'}
         ],
-      }).run(connection),
+        }
+      ).run(connection),
       db.table('Maps').insert({
         scenarioID: '',
         assets: [
@@ -106,6 +109,7 @@ thinky.dbReady()
           console.log(val);
           console.log('Creating documents!');
 
+          // Dummy user
           const user = new User({
             name: 'foo',
             mail: 'foo@bar.com',
@@ -113,6 +117,7 @@ thinky.dbReady()
             createdAt: r.now(),
           });
 
+          // Scenario A
           const scenA = new Scenario({
             title: "The wolf and the dummy",
             introduction: "Oh no - wolf... and a dummy",
@@ -133,6 +138,7 @@ thinky.dbReady()
             ],
           });
 
+          // Scenario B
           const scenB = new Scenario({
             title: "baaaar",
             introduction: "",
@@ -148,15 +154,73 @@ thinky.dbReady()
             ],
           });
 
+          // Comments for A
+          const commA1 = new ScenarioComment({
+            text: "This is a bad scenario",
+          });
+
+          const commA2 = new ScenarioComment({
+            text: "Na, I disagree (with myself)!",
+          });
+
+          // Comments for B
+          const commB1 = new ScenarioComment({
+            text: "Hi there!",
+          });
+
+          // Campaign
+          const campaignA = new Campaign({
+            createdAt: r.now(),
+            creatorID: '',
+            title: 'The awesome dummy campaign',
+            description: 'Only true adventurers know how to deal with "The Dummy"...',
+            introduction: 'Once upon a time...',
+            conclusion: '...and "The Dummy" said:...',
+            rating: 5,
+            public: true,
+          });
+
+          // CampaignComments
+          const campComment = new CampaignComment({
+            text: 'This is a cool campaign',
+          })
+
+          // Relations
           user.scenarios = [scenA, scenB];
-          user.saveAll({scenarios: true}).then(
-            val => {
-              console.log(val)
-              User.getJoin({scenarios: true}).then(
-                val => console.log(val)
-              )
-            }
-          );
+          user.scenarioComments = [commA1, commA2, commB1];
+          user.campaigns = [campaignA];
+          user.campaignComments = [campComment];
+
+          scenA.scenarioComments = [commA1, commA2];
+          scenB.scenarioComments = [commB1];
+
+          campaignA.campaignComments = [campComment];
+
+          // Save
+          user.saveAll({
+            scenarios: {
+              scenarioComments: true,
+            },
+            campaigns: {
+              campaignComments: true,
+            },
+          }).then(
+           () => {
+             return user.saveAll({
+               scenarioComments: true,
+               campaignComments: true,
+             });
+          }).then(
+            () => {
+              User.getJoin({
+                scenarios: {
+                  scenarioComments: true,
+                },
+                campaigns: {
+                  campaignComments: true,
+                },
+              })
+          });
         }
       )
     }

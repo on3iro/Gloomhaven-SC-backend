@@ -1,4 +1,5 @@
 import { thinky } from '../plugins';
+import { Scenario } from '../scenarios/models';
 
 
 const type = thinky.type;
@@ -14,6 +15,16 @@ export const Campaign = thinky.createModel('Campaign', {
   conclusion: type.string(),
   rating: type.number(),
   public: type.boolean().default(false),
+  links: [{
+    source: {
+      id: type.string(),
+      code: type.string(),
+    },
+    target: {
+      id: type.string(),
+      code: type.string(),
+    },
+  }],
 });
 
 export const CampaignComment = thinky.createModel('CampaignComment', {
@@ -27,3 +38,6 @@ export const CampaignComment = thinky.createModel('CampaignComment', {
 // Campaign --< CampaignComments
 Campaign.hasMany(CampaignComment, "campaignComments", "id", "campaignID");
 CampaignComment.belongsTo(Campaign, "campaign", "campaignID", "id");
+
+// Campaign >--< Scenarios
+Campaign.hasAndBelongsToMany(Scenario, "scenarios", "id", "id");

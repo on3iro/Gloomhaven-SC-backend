@@ -194,23 +194,39 @@ thinky.dbReady()
           scenA.scenarioComments = [commA1, commA2];
           scenB.scenarioComments = [commB1];
 
+          campaignA.scenarios = [scenA, scenB];
           campaignA.campaignComments = [campComment];
 
           // Save
-          user.saveAll({
-            scenarios: {
-              scenarioComments: true,
-            },
-            campaigns: {
-              campaignComments: true,
-            },
-          }).then(
-           () => {
-             return user.saveAll({
-               scenarioComments: true,
-               campaignComments: true,
-             });
-          }).then(
+          user.saveAll(
+            {
+              scenarios: {
+                scenarioComments: true,
+              },
+            }
+          ).then(
+            () => {
+              // Set campaign links
+              campaignA.links = [{
+                source: { id: scenA.id, code: 'A1' },
+                target: { id: scenB.id, code: 'B1'}
+              }];
+
+              return user.saveAll({
+                campaigns: {
+                  campaignComments: true,
+                  scenarios: true,
+                }
+              });
+            }
+          ).then(
+            () => {
+              return user.saveAll({
+                scenarioComments: true,
+                campaignComments: true,
+              });
+            }
+          ).then(
             () => {
               User.getJoin({
                 scenarios: {
@@ -219,8 +235,9 @@ thinky.dbReady()
                 campaigns: {
                   campaignComments: true,
                 },
-              })
-          });
+              });
+            }
+          );
         }
       )
     }

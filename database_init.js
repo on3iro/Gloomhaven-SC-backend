@@ -3,73 +3,12 @@ import { User } from './src/users/models';
 import { Scenario, ScenarioComment } from './src/scenarios/models';
 import { Campaign, CampaignComment } from './src/campaigns/models';
 import { Asset, AssetType } from './src/assets/models';
-import { ScenarioMap } from './src/maps/models';
+import { ScenarioMap, MapAsset } from './src/maps/models';
 import { DATABASE_NAME } from './src/config';
 
 
 const r = thinky.r;
 
-function createInitialData(connection, db) {
-  return Promise.all(
-    [
-      db.table('AssetTypes').insert({
-        title: 'Enemy',
-        icon: null,
-        fields: [
-          {name: 'attack'},
-          {name: 'defense'},
-          {name: 'life'},
-        ],
-      }).run(connection),
-      db.table('Assets').insert({
-        createdAt: r.now(),
-        creatorID: '',
-        typeID: '',
-        title: 'Crazy Wolf',
-        public: 'false',
-      }).run(connection),
-      db.table('CampaignComments').insert({
-        createdAt: r.now(),
-        campaignID: '',
-        userID: '',
-        text: 'This campaign is awesome'
-      }).run(connection),
-      db.table('Campaigns').insert(
-        {
-        createdAt: r.now(),
-        creatorID: '',
-        title: 'The awesome dummy campaign',
-        description: 'Only true adventurers know how to deal with "The Dummy"...',
-        introduction: 'Once upon a time...',
-        conclusion: '...and "The Dummy" said:...',
-        rating: 5,
-        public: true,
-        scenarios: [
-          {id: '', scenarioCode: 'Q1'}
-        ],
-        links: [
-          {sourceID: '', source: 'Q1', targetID: '', target: 'Q2'}
-        ],
-        }
-      ).run(connection),
-      db.table('Maps').insert({
-        scenarioID: '',
-        assets: [
-          {assetID: '', playerCount: 3, fieldCoordinate: '23'}
-        ],
-      }).run(connection),
-      db.table('ScenarioComments').insert({
-        createdAt: r.now(),
-        scenarioID: '',
-        userID: '',
-        text: "Wow, what a scenario...",
-      }).run(connection),
-      db.table('Scenarios').insert({
-        createdAt: r.now(),
-      }).run(connection),
-    ]
-  );
-}
 
 // -----------------------------------------------------------------------------
 // Query execution
@@ -227,6 +166,28 @@ thinky.dbReady()
             title: "Firetrap",
           });
 
+          // MapAssets
+          const mapADork = new MapAsset({
+            fields: {
+              playerCount: 3,
+              fieldCoordinate: '23',
+            }
+          });
+
+          const mapAFire = new MapAsset({
+            fields: {
+              playerCount: 2,
+              fieldCoordinate: 'A6'
+            }
+          });
+
+          const mapBFire = new MapAsset({
+            fields: {
+              playerCount: 4,
+              fieldCoordinate: '45',
+            }
+          });
+
           // Relations
           user.scenarios = [scenA, scenB];
           user.scenarioComments = [commA1, commA2, commB1];
@@ -240,8 +201,12 @@ thinky.dbReady()
           scenA.scenarioMap = mapA;
           scenB.scenarioMap = mapB;
 
-          mapA.assets = [dorkazork, fireTrap];
-          mapB.assets = [fireTrap];
+          mapADork.asset = dorkazork;
+          mapAFire.asset = fireTrap;
+          mapBFire.asset = fireTrap;
+
+          mapA.mapAssets = [mapADork, mapAFire];
+          mapB.mapAssets = [mapBFire];
 
           campaignA.scenarios = [scenA, scenB];
           campaignA.campaignComments = [campComment];
@@ -296,8 +261,16 @@ thinky.dbReady()
           ).then(
             () => {
               return Promise.all([
-                mapA.saveAll({assets: true}),
-                mapB.saveAll({assets: true}),
+                mapADork.saveAll({asset: true}),
+                mapAFire.saveAll({asset: true}),
+                mapBFire.saveAll({asset: true}),
+              ]);
+            }
+          ).then(
+            () => {
+              return Promise.all([
+                mapA.saveAll({mapAssets: true}),
+                mapB.saveAll({mapAssets: true}),
               ]);
             }
           ).then(

@@ -12,7 +12,6 @@ export const Asset = thinky.createModel('Asset', {
   title: type.string().required(),
   imagePath: type.string(),
   public: type.boolean().default(false),
-  fields: type.object().allowExtra(),
 });
 
 export const AssetType = thinky.createModel('AssetType', {

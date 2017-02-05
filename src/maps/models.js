@@ -10,5 +10,16 @@ export const ScenarioMap = thinky.createModel('ScenarioMap', {
   scenarioID: type.string(),
 });
 
-// ScenarioMap >--< Assets
-ScenarioMap.hasAndBelongsToMany(Asset, "assets", "id", "id");
+export const MapAsset = thinky.createModel('MapAsset', {
+  id: type.string(),
+  mapID: type.string(),
+  fields: type.object().allowExtra(),
+});
+
+// ScenarioMap --< MapAssets
+ScenarioMap.hasMany(MapAsset, "mapAssets", "id", "scenarioMapID");
+MapAsset.belongsTo(ScenarioMap, "scenarioMap", "scenarioMapID", "id");
+
+// Asset --< MapAssets
+Asset.hasMany(MapAsset, "mapAssets", "id", "assetID");
+MapAsset.belongsTo(Asset, "asset", "assetID", "id");

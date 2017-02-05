@@ -2,6 +2,8 @@ import { thinky } from './src/plugins';
 import { User } from './src/users/models';
 import { Scenario, ScenarioComment } from './src/scenarios/models';
 import { Campaign, CampaignComment } from './src/campaigns/models';
+import { Asset, AssetType } from './src/assets/models';
+import { ScenarioMap } from './src/maps/models';
 import { DATABASE_NAME } from './src/config';
 
 
@@ -168,6 +170,12 @@ thinky.dbReady()
             text: "Hi there!",
           });
 
+          // Map for A
+          const mapA = new ScenarioMap({});
+
+          // Map for B
+          const mapB = new ScenarioMap({});
+
           // Campaign
           const campaignA = new Campaign({
             createdAt: r.now(),
@@ -185,17 +193,61 @@ thinky.dbReady()
             text: 'This is a cool campaign',
           })
 
+          // AssetTypes
+          const enemy = new AssetType({
+            title: "Enemy",
+          });
+
+          const obstacle = new AssetType({
+            title: "Obstacle",
+          });
+
+          const treasure = new AssetType({
+            title: "Treasure",
+          });
+
+          const trap = new AssetType({
+            title: "Trap",
+          });
+
+          const item = new AssetType({
+            title: "Item",
+          });
+
+          const mapTile = new AssetType({
+            title: "MapTile",
+          });
+
+          // Assets
+          const dorkazork = new Asset({
+            title: "Dorkazork",
+          });
+
+          const fireTrap = new Asset({
+            title: "Firetrap",
+          });
+
           // Relations
           user.scenarios = [scenA, scenB];
           user.scenarioComments = [commA1, commA2, commB1];
           user.campaigns = [campaignA];
           user.campaignComments = [campComment];
+          user.assets = [dorkazork, fireTrap];
 
           scenA.scenarioComments = [commA1, commA2];
           scenB.scenarioComments = [commB1];
 
+          scenA.scenarioMap = mapA;
+          scenB.scenarioMap = mapB;
+
+          mapA.assets = [dorkazork, fireTrap];
+          mapB.assets = [fireTrap];
+
           campaignA.scenarios = [scenA, scenB];
           campaignA.campaignComments = [campComment];
+
+          dorkazork.assetType = enemy;
+          fireTrap.assetType = trap;
 
           // Save
           user.saveAll(
@@ -221,9 +273,46 @@ thinky.dbReady()
             }
           ).then(
             () => {
+              return Promise.all([
+                enemy.save(),
+                obstacle.save(),
+                treasure.save(),
+                trap.save(),
+                item.save(),
+                mapTile.save(),
+              ]);
+            }
+          ).then(
+            () => {
+              return Promise.all([
+                dorkazork.saveAll({
+                  assetType: true,
+                }),
+                fireTrap.saveAll({
+                  assetType: true,
+                })
+              ]);
+            }
+          ).then(
+            () => {
+              return Promise.all([
+                mapA.saveAll({assets: true}),
+                mapB.saveAll({assets: true}),
+              ]);
+            }
+          ).then(
+            () => {
+              return Promise.all([
+                scenA.saveAll({scenarioMap: true}),
+                scenB.saveAll({scenarioMap: true}),
+              ]);
+            }
+          ).then(
+            () => {
               return user.saveAll({
                 scenarioComments: true,
                 campaignComments: true,
+                assets: true,
               });
             }
           ).then(

@@ -1,6 +1,7 @@
 import { thinky } from '../plugins';
 import { Scenario, ScenarioComment } from '../scenarios/models';
 import { Campaign, CampaignComment } from '../campaigns/models';
+import { Asset } from '../assets/models';
 
 
 const r = thinky.r;
@@ -29,3 +30,7 @@ Campaign.belongsTo(User, "user", "userID", "id");
 // User --< CampaignComments
 User.hasMany(CampaignComment, "campaignComments", "id", "userID");
 CampaignComment.belongsTo(User, "user", "userID", "id");
+
+// User --< Assets
+User.hasMany(Asset, "assets", "id", "userID");
+Asset.belongsTo(User, "user", "userID", "id");

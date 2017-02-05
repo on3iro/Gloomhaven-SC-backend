@@ -106,14 +106,14 @@ thinky.dbReady()
           console.log(val);
           console.log('Creating documents!');
 
-          const foo = new User({
+          const user = new User({
             name: 'foo',
             mail: 'foo@bar.com',
             password: '123456',
             createdAt: r.now(),
           });
 
-          const scenario = new Scenario({
+          const scenA = new Scenario({
             title: "The wolf and the dummy",
             introduction: "Oh no - wolf... and a dummy",
             conclusion: "That's it",
@@ -133,28 +133,30 @@ thinky.dbReady()
             ],
           });
 
-          foo.save()
-            .then(
-              (val) => {
-                console.log(val);
-                return new Promise(
-                  (resolve, reject) => {
-                    scenario.save().then(
-                      val => {
-                        console.log(val);
-                        resolve('Scenario saved');
-                      }
-                    )
-                  }
-                )
-              }
-            )
-            .then(
-              val => {
-                console.log(val);
-                resolve('Done!')
-              }
-            );
+          const scenB = new Scenario({
+            title: "baaaar",
+            introduction: "",
+            conclusion: "",
+            notes: "",
+            description: "Setting the bar high",
+            rating: 1,
+            goals: [
+              'Release me',
+            ],
+            requirements: [
+              'Foo',
+            ],
+          });
+
+          user.scenarios = [scenA, scenB];
+          user.saveAll({scenarios: true}).then(
+            val => {
+              console.log(val)
+              User.getJoin({scenarios: true}).then(
+                val => console.log(val)
+              )
+            }
+          );
         }
       )
     }

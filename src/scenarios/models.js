@@ -5,6 +5,8 @@ const type = thinky.type;
 const r = thinky.r;
 
 export const Scenario = thinky.createModel('Scenario', {
+  id: type.string(),
+  userID: type.string(),
   title: type.string().required(),
   introduction: type.string(),
   conclusion: type.string(),

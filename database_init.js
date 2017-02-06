@@ -21,6 +21,12 @@ const rl = readline.createInterface({
 });
 
 function promptOverwrite(tableValues) {
+  /**
+   * If there are already tables inside the database the user is prompted
+   * to continue the script. Returns a promise which only resolves if there are
+   * no tables or if the user presses 'y'.
+    */
+
   return new Promise(
     (resolve, reject) => {
       if(tableValues.length > 0) {
@@ -36,6 +42,10 @@ function promptOverwrite(tableValues) {
 }
 
 function createContent() {
+  /**
+    * Creates and writes database content.
+    */
+
   return new Promise(
     (resolve, reject) => {
       console.log('Creating documents!');

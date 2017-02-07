@@ -1,10 +1,6 @@
-import { DATABASE_NAME } from './config';
+import config from 'config';
 
-const thinky = require('thinky')({
-  host: 'localhost',
-  port: 28015,
-  db: DATABASE_NAME,
-});
+const thinky = require('thinky')(config.get("dbConfig"));
 
 module.exports = {
   thinky,

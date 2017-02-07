@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import config from 'config';
 
-import { User } from 'models';
+import { User } from './models';
 
 
 export function hashPassword(password) {
@@ -125,10 +125,15 @@ export function register(req, res, next) {
         const user = new User({
           name,
           email,
-          password: hashPassword(password)
         });
 
-        return user.saveAll();
+        return hashPassword(password)
+          .then(
+            hash => {
+              user.password = hash;
+              return user.saveAll();
+            }
+          );
       }
     )
     .catch(

@@ -4,8 +4,8 @@ import { ExtractJwt } from 'passport-jwt';
 import { JwtStrategy } from 'passport-jwt';
 import config from 'config';
 
-import { User } from 'models';
-import { authenticate, hashPassword } from 'auth';
+import { User } from './models';
+import { authenticate, hashPassword } from './auth';
 
 const localOptions = { usernameField: 'email'};
 const localLogin = new Strategy(localOptions, (email, password, done) => {

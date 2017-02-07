@@ -5,7 +5,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import passport from 'passport';
 
-import users from './users/api';
+import { apiRoutes } from './users/api';
 
 
 const app = express();
@@ -26,7 +26,7 @@ app.get('/', (req, res) => {
 app.get('/login', (req, res) => {
   res.send('Heya, login!');
 });
-app.use('/users', users);
+app.use('/api', apiRoutes);
 
 
 // Error handling

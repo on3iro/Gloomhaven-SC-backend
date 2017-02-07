@@ -54,8 +54,7 @@ function createContent() {
       // Dummy user
       const user = new User({
         name: 'foo',
-        mail: 'foo@bar.com',
-        createdAt: r.now(),
+        email: 'foo@bar.com',
       });
 
       // Scenario A

@@ -4,20 +4,11 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import helmet from 'helmet';
 import passport from 'passport';
-import { LocalStrategy } from 'passport-local';
-import { ExtractJWT } from 'passport-jwt';
-import { JwtStrategy } from 'passport-jwt';
 
-import { User } from './users/models';
 import users from './users/api';
 
+
 const app = express();
-
-// Define passport
-// const localOptions = { usernameField: 'mail'};
-// const localLogin = new LocalStrategy(localOptions, (email, password, done) => {
-// });
-
 
 // Initialize modules
 app.use(logger('dev'));
@@ -25,13 +16,18 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
 app.use(helmet());
+app.use(passport.initialize());
+
 
 // Initialize API
-app.get('/', (req, resp) => {
-  User.filter({mail: 'foo@bar.com'}).run().then(val => resp.send(val));
-  // resp.send('test');
+app.get('/', (req, res) => {
+  res.send('HI');
+});
+app.get('/login', (req, res) => {
+  res.send('Heya, login!');
 });
 app.use('/users', users);
+
 
 // Error handling
 app.use((error, req, res, next) => {

@@ -1,11 +1,26 @@
 import express from 'express';
+import logger from 'morgan';
+import bodyParser from 'body-parser';
+import cors from 'cors';
+import helmet from 'helmet';
 
 const app = express();
 
-app.get('/', (req, res) => {
-  res.send('Hello World!');
+// Initialize modules
+app.use(logger('dev'));
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use(cors());
+app.use(helmet());
+
+app.use((error, request, response, next) => {
+  response.status(error.status || 500);
+  response.json({ error: error.message });
 });
 
-app.listen(3000, () => {
-  console.log('Example app listening on port 3000!');
+const server = app.listen(3000, () => {
+  const host = server.address().address;
+  const port = server.address().port;
+
+  console.log(`App is listening on http://${host}:${port}`);
 });

@@ -82,11 +82,8 @@ export function register(req, res, next) {
 
   // Check if user with provided mail already exists
   return User.filter({ email: email }).run()
-    .catch(
-      err => next(err)
-    )
-    .then(
-      userList => new Promise(
+    .catch(err => next(err))
+    .then(userList => new Promise(
         (resolve, reject) => {
           if(userList.length > 0) {
             return reject('This email is already in use.');
@@ -96,18 +93,13 @@ export function register(req, res, next) {
         }
       )
     )
-    .catch(
-      msg => res.status(422).send({ error: msg })
-    )
+    .catch(msg => res.status(422).send({ error: msg }))
     .then(
       // Check if username already exists
       () => User.filter({ name: name }).run()
     )
-    .catch(
-      err => next(err)
-    )
-    .then(
-      userList => new Promise(
+    .catch(err => next(err))
+    .then(userList => new Promise(
         (resolve, reject) => {
           if(userList.length > 0) {
             return reject('This name is already in use.');
@@ -115,38 +107,27 @@ export function register(req, res, next) {
             return resolve();
           }
         }
-      )
-    )
-    .catch(
-      msg => res.status(422).send({ error: msg })
-    )
-    .then(
-      () => {
+      ))
+    .catch(msg => res.status(422).send({ error: msg }))
+    .then(() => {
         const user = new User({
           name,
           email,
         });
 
         return hashPassword(password)
-          .then(
-            hash => {
+          .then(hash => {
               user.password = hash;
               return user.saveAll();
-            }
-          );
-      }
-    )
-    .catch(
-      err => next(err)
-    )
-    .then(
-      user => {
+            });
+      })
+    .catch(err => next(err))
+    .then(user => {
         const userInfo = setUserInfo(user);
 
         res.status(201).json({
           token: 'JWT' + generateToken(userInfo),
           user: userInfo
         });
-      }
-    );
+      });
 }

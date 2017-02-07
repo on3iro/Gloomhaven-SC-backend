@@ -19,24 +19,18 @@ const localLogin = new Strategy(localOptions, (email, password, done) => {
         }
 
         return authenticate(password, user[0].password)
-          .then(
-            val => {
+          .then(val => {
               return done(null, user);
-            }
-          )
-          .catch(
-            val => {
+            })
+          .catch(val => {
               console.log(val);
               return done(null, false, { message: incorrMessage });
-            }
-          )
+            })
       }
     )
-    .catch(
-      err => {
+    .catch(err => {
         return done(err);
-      }
-    );
+      });
 });
 
 const jwtOptions = {

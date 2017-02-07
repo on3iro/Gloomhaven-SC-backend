@@ -215,8 +215,7 @@ function createContent() {
 
       // Save
       hashPassword('123456')
-        .then(
-          (hash) => {
+        .then(hash => {
             console.log('Generating password hash...');
             user.password = hash;
             return user.saveAll(
@@ -226,9 +225,8 @@ function createContent() {
                 },
               }
             );
-          }
-      ).then(
-        () => {
+        })
+        .then(() => {
           // Set campaign links
           campaignA.links = [{
             source: { id: scenA.id, code: 'A1' },
@@ -241,9 +239,8 @@ function createContent() {
               scenarios: true,
             }
           });
-        }
-      ).then(
-        () => {
+        })
+        .then(() => {
           return Promise.all([
             enemy.save(),
             obstacle.save(),
@@ -252,9 +249,8 @@ function createContent() {
             item.save(),
             mapTile.save(),
           ]);
-        }
-      ).then(
-        () => {
+        })
+        .then(() => {
           return Promise.all([
             dorkazork.saveAll({
               assetType: true,
@@ -263,40 +259,34 @@ function createContent() {
               assetType: true,
             })
           ]);
-        }
-      ).then(
-        () => {
+        })
+        .then(() => {
           return Promise.all([
             mapADork.saveAll({asset: true}),
             mapAFire.saveAll({asset: true}),
             mapBFire.saveAll({asset: true}),
           ]);
-        }
-      ).then(
-        () => {
+        })
+        .then(() => {
           return Promise.all([
             mapA.saveAll({mapAssets: true}),
             mapB.saveAll({mapAssets: true}),
           ]);
-        }
-      ).then(
-        () => {
+        })
+        .then(() => {
           return Promise.all([
             scenA.saveAll({scenarioMap: true}),
             scenB.saveAll({scenarioMap: true}),
           ]);
-        }
-      ).then(
-        () => {
+        })
+        .then(() => {
           return user.saveAll({
             scenarioComments: true,
             campaignComments: true,
             assets: true,
           });
-        }
-      ).then(
-        () => resolve('Done!')
-      );
+        })
+        .then(() => resolve('Done!'));
     }
   );
 }
@@ -318,18 +308,14 @@ thinky.dbReady()
           tableValues => resolve(tableValues)
         );
       }
-    )
-  ).then(
+    ))
+  .then(
     // Prompt user
     (tableValues) => {
       return promptOverwrite(tableValues);
-    }
-  )
-  .catch(
-    () => process.exit(0)
-  )
-  .then(
-    tableValues => {
+    })
+  .catch(() => process.exit(0))
+  .then(tableValues => {
       Promise.all(
         tableValues.map(val => {
           return r.table(val).delete().run()
@@ -338,14 +324,9 @@ thinky.dbReady()
             );
         })
       );
-    }
-  )
-  .then(
-    () => createContent()
-  )
-  .then(
-    val => {
+    })
+  .then(() => createContent())
+  .then(val => {
       console.log(val);
       process.exit(0);
-    }
-  );
+    });

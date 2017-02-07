@@ -3,7 +3,6 @@ import { Asset } from '../assets/models';
 
 
 const type = thinky.type;
-const r = thinky.r;
 
 export const ScenarioMap = thinky.createModel('ScenarioMap', {
   id: type.string(),

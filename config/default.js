@@ -1,7 +1,7 @@
 module.exports = {
   dbConfig: {
-    host: "localhost",
+    host: 'localhost',
     port: 28015,
-      db: "gloomhavenSC"
+    db: 'gloomhavenSC'
   }
-}
+};

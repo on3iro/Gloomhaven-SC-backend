@@ -7,6 +7,7 @@ import { Scenario, ScenarioComment } from './src/scenarios/models';
 import { Campaign, CampaignComment } from './src/campaigns/models';
 import { Asset, AssetType } from './src/assets/models';
 import { ScenarioMap, MapAsset } from './src/maps/models';
+import { hashPassword } from './src/users/auth';
 
 
 const r = thinky.r;
@@ -33,12 +34,12 @@ function promptOverwrite(tableValues) {
         rl.question('The database is not empty.\ Would you like to continue and delete all data? (y/N)\n',
           answer => {
             answer.toLowerCase() === 'y' ? resolve(tableValues) : reject();
-        });
+          });
       }else{
         resolve(tableValues);
       }
     }
-  )
+  );
 }
 
 function createContent() {
@@ -47,14 +48,13 @@ function createContent() {
     */
 
   return new Promise(
-    (resolve, reject) => {
+    resolve => {
       console.log('Creating documents!');
 
       // Dummy user
       const user = new User({
         name: 'foo',
         mail: 'foo@bar.com',
-        password: '123456',
         createdAt: r.now(),
       });
 
@@ -130,7 +130,7 @@ function createContent() {
       // CampaignComments
       const campComment = new CampaignComment({
         text: 'This is a cool campaign',
-      })
+      });
 
       // AssetTypes
       const enemy = new AssetType({
@@ -215,12 +215,19 @@ function createContent() {
       fireTrap.assetType = trap;
 
       // Save
-      user.saveAll(
-        {
-          scenarios: {
-            scenarioComments: true,
-          },
-        }
+      hashPassword('123456')
+        .then(
+          (hash) => {
+            console.log('Generating password hash...');
+            user.password = hash;
+            return user.saveAll(
+              {
+                scenarios: {
+                  scenarioComments: true,
+                },
+              }
+            );
+          }
       ).then(
         () => {
           // Set campaign links
@@ -329,13 +336,13 @@ thinky.dbReady()
           return r.table(val).delete().run()
             .then(
               (doc) => console.log(`Table ${val}:`, doc)
-            )
+            );
         })
-      )
+      );
     }
   )
   .then(
-    val => createContent()
+    () => createContent()
   )
   .then(
     val => {

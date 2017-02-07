@@ -36,8 +36,8 @@ export const CampaignComment = thinky.createModel('CampaignComment', {
 });
 
 // Campaign --< CampaignComments
-Campaign.hasMany(CampaignComment, "campaignComments", "id", "campaignID");
-CampaignComment.belongsTo(Campaign, "campaign", "campaignID", "id");
+Campaign.hasMany(CampaignComment, 'campaignComments', 'id', 'campaignID');
+CampaignComment.belongsTo(Campaign, 'campaign', 'campaignID', 'id');
 
 // Campaign >--< Scenarios
-Campaign.hasAndBelongsToMany(Scenario, "scenarios", "id", "id");
+Campaign.hasAndBelongsToMany(Scenario, 'scenarios', 'id', 'id');

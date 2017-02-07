@@ -21,5 +21,5 @@ export const AssetType = thinky.createModel('AssetType', {
 });
 
 // AssetType --< Assets
-AssetType.hasMany(Asset, "assets", "id", "assetTypeID");
-Asset.belongsTo(AssetType, "assetType", "assetTypeID", "id");
+AssetType.hasMany(Asset, 'assets', 'id', 'assetTypeID');
+Asset.belongsTo(AssetType, 'assetType', 'assetTypeID', 'id');

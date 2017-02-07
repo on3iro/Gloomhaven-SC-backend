@@ -33,9 +33,9 @@ export const ScenarioComment = thinky.createModel('ScenarioComment', {
 });
 
 // Scenario --< ScenarioComments
-Scenario.hasMany(ScenarioComment, "scenarioComments", "id", "scenarioID");
-ScenarioComment.belongsTo(Scenario, "scenario", "scenarioID", "id");
+Scenario.hasMany(ScenarioComment, 'scenarioComments', 'id', 'scenarioID');
+ScenarioComment.belongsTo(Scenario, 'scenario', 'scenarioID', 'id');
 
 // Scenario -- Map
-Scenario.hasOne(ScenarioMap, "scenarioMap", "id", "scenarioID");
-ScenarioMap.belongsTo(Scenario, "scenario", "scenarioID", "id");
+Scenario.hasOne(ScenarioMap, 'scenarioMap', 'id', 'scenarioID');
+ScenarioMap.belongsTo(Scenario, 'scenario', 'scenarioID', 'id');

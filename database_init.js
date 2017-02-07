@@ -60,11 +60,11 @@ function createContent() {
 
       // Scenario A
       const scenA = new Scenario({
-        title: "The wolf and the dummy",
-        introduction: "Oh no - wolf... and a dummy",
-        conclusion: "That's it",
-        notes: "Don't play this... seriously",
-        description: "Crazy wolf slaying",
+        title: 'The wolf and the dummy',
+        introduction: 'Oh no - wolf... and a dummy',
+        conclusion: 'That\'s it',
+        notes: 'Don\'t play this... seriously',
+        description: 'Crazy wolf slaying',
         rating: 2,
         public: true,
         sections: [
@@ -81,11 +81,11 @@ function createContent() {
 
       // Scenario B
       const scenB = new Scenario({
-        title: "baaaar",
-        introduction: "",
-        conclusion: "",
-        notes: "",
-        description: "Setting the bar high",
+        title: 'baaaar',
+        introduction: '',
+        conclusion: '',
+        notes: '',
+        description: 'Setting the bar high',
         rating: 1,
         goals: [
           'Release me',
@@ -97,16 +97,16 @@ function createContent() {
 
       // Comments for A
       const commA1 = new ScenarioComment({
-        text: "This is a bad scenario",
+        text: 'This is a bad scenario',
       });
 
       const commA2 = new ScenarioComment({
-        text: "Na, I disagree (with myself)!",
+        text: 'Na, I disagree (with myself)!',
       });
 
       // Comments for B
       const commB1 = new ScenarioComment({
-        text: "Hi there!",
+        text: 'Hi there!',
       });
 
       // Map for A
@@ -134,36 +134,36 @@ function createContent() {
 
       // AssetTypes
       const enemy = new AssetType({
-        title: "Enemy",
+        title: 'Enemy',
       });
 
       const obstacle = new AssetType({
-        title: "Obstacle",
+        title: 'Obstacle',
       });
 
       const treasure = new AssetType({
-        title: "Treasure",
+        title: 'Treasure',
       });
 
       const trap = new AssetType({
-        title: "Trap",
+        title: 'Trap',
       });
 
       const item = new AssetType({
-        title: "Item",
+        title: 'Item',
       });
 
       const mapTile = new AssetType({
-        title: "MapTile",
+        title: 'MapTile',
       });
 
       // Assets
       const dorkazork = new Asset({
-        title: "Dorkazork",
+        title: 'Dorkazork',
       });
 
       const fireTrap = new Asset({
-        title: "Firetrap",
+        title: 'Firetrap',
       });
 
       // MapAssets

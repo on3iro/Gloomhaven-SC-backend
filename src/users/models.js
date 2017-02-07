@@ -16,21 +16,21 @@ export const User = thinky.createModel('User', {
 });
 
 // User --< Scenarios
-User.hasMany(Scenario, "scenarios", "id", "userID");
-Scenario.belongsTo(User, "user", "userID", "id");
+User.hasMany(Scenario, 'scenarios', 'id', 'userID');
+Scenario.belongsTo(User, 'user', 'userID', 'id');
 
 // User --< ScenarioComments
-User.hasMany(ScenarioComment, "scenarioComments", "id", "userID");
-ScenarioComment.belongsTo(User, "user", "userID", "id");
+User.hasMany(ScenarioComment, 'scenarioComments', 'id', 'userID');
+ScenarioComment.belongsTo(User, 'user', 'userID', 'id');
 
 // User --< Campaigns
-User.hasMany(Campaign, "campaigns", "id", "userID");
-Campaign.belongsTo(User, "user", "userID", "id");
+User.hasMany(Campaign, 'campaigns', 'id', 'userID');
+Campaign.belongsTo(User, 'user', 'userID', 'id');
 
 // User --< CampaignComments
-User.hasMany(CampaignComment, "campaignComments", "id", "userID");
-CampaignComment.belongsTo(User, "user", "userID", "id");
+User.hasMany(CampaignComment, 'campaignComments', 'id', 'userID');
+CampaignComment.belongsTo(User, 'user', 'userID', 'id');
 
 // User --< Assets
-User.hasMany(Asset, "assets", "id", "userID");
-Asset.belongsTo(User, "user", "userID", "id");
+User.hasMany(Asset, 'assets', 'id', 'userID');
+Asset.belongsTo(User, 'user', 'userID', 'id');

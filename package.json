@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "test": "test",
-    "start": "nodemon --exec npm run babel -- src/app.js",
+    "start": "nodemon --exec npm run eslint && npm run babel -- src/app.js",
     "babel": "babel-node",
     "eslint": "eslint ./",
     "initDB": "babel-node database_init.js",

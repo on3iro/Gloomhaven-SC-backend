@@ -1,4 +1,5 @@
 import readline from 'readline';
+import config from 'config';
 
 import { thinky } from './src/plugins';
 import { User } from './src/users/models';
@@ -6,7 +7,6 @@ import { Scenario, ScenarioComment } from './src/scenarios/models';
 import { Campaign, CampaignComment } from './src/campaigns/models';
 import { Asset, AssetType } from './src/assets/models';
 import { ScenarioMap, MapAsset } from './src/maps/models';
-import { DATABASE_NAME } from './src/config';
 
 
 const r = thinky.r;
@@ -303,7 +303,7 @@ thinky.dbReady()
   .then(
     () => new Promise(
       resolve => {
-        const db = r.db(DATABASE_NAME);
+        const db = r.db(config.get('dbConfig.db'));
 
         console.log('Database ready!');
 

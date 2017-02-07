@@ -6,7 +6,9 @@
   "private": true,
   "scripts": {
     "test": "test",
-    "start": "nodemon --exec npm run eslint && npm run babel -- src/app.js",
+    "prestart": "eslint .",
+    "start": "npm run babel -- src/app.js",
+    "dev": "nodemon --exec npm start",
     "babel": "babel-node",
     "eslint": "eslint ./",
     "initDB": "babel-node database_init.js",
@@ -34,9 +36,11 @@
     "config": "^1.25.1",
     "cors": "^2.8.1",
     "express": "^4.14.1",
-    "express-jwt": "^5.1.0",
     "helmet": "^3.4.0",
     "morgan": "^1.8.0",
+    "passport": "^0.3.2",
+    "passport-jwt": "^2.2.1",
+    "passport-local": "^1.0.0",
     "rethinkdb": "^2.3.3",
     "thinky": "^2.3.8"
   },

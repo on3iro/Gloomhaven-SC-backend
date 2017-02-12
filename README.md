@@ -8,4 +8,4 @@
 
 ## About
 This is a backend implementation for the [Gloomhaven-scenario-creator](https://github.com/on3iro/Gloomhaven-scenario-creator).
-To get further information and details for contribution please refer to this [![Project](https://img.shields.io/badge/GH--Pages-https%3A%2F%2Fon3iro.github.io%2FGloomhaven--scenario--creator%2F-149A86.svg?style=flat-square)](https://on3iro.github.io/Gloomhaven-scenario-creator/)!
+To get further information and details for contribution please refer to this [Project](https://on3iro.github.io/Gloomhaven-scenario-creator/)!

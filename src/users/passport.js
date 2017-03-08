@@ -37,7 +37,7 @@ const jwtOptions = {
   // Look for secret
   secretOrKey: config.get('secretKey'),
 };
-const jwtLogin = new JwtStrategy(jwtOptions, (payload, done) => {
+const jwtAuth = new JwtStrategy(jwtOptions, (payload, done) => {
   const incorrMessage = 'Invalid Token provided!';
 
   User.get(payload.id).run()
@@ -55,7 +55,7 @@ const jwtLogin = new JwtStrategy(jwtOptions, (payload, done) => {
       });
 });
 
-passport.use(jwtLogin);
+passport.use(jwtAuth);
 passport.use(localLogin);
 
 export default passport;

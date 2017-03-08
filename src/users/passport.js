@@ -7,7 +7,7 @@ import config from 'config';
 import { User } from './models';
 import { authenticate, hashPassword } from './auth';
 
-const localOptions = { usernameField: 'email'};
+const localOptions = { usernameField: 'email' };
 const localLogin = new Strategy(localOptions, (email, password, done) => {
   const incorrMessage = 'Incorrect username or password!';
 
@@ -39,10 +39,12 @@ const jwtOptions = {
   // Look for secret
   secretOrKey: config.get('secretKey'),
 };
-const jwtLogin = new JwtStrategy(jwtOptions, (payload, done) => {
-  console.log(payload);
-  done(null, false);
-});
+// const jwtLogin = new JwtStrategy(jwtOptions, (payload, done) => {
+  // console.log(payload);
+  // done(null, false);
+// });
 
-passport.use(jwtLogin);
+// passport.use(jwtLogin);
 passport.use(localLogin);
+
+export default passport;

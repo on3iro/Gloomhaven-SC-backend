@@ -3,7 +3,7 @@ import logger from 'morgan';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import helmet from 'helmet';
-import passport from 'passport';
+import passport from './users/passport';
 
 import { apiRoutes } from './users/api';
 
@@ -40,7 +40,7 @@ app.use((error, req, res, next) => {
   next();
 });
 
-const server = app.listen(3000, () => {
+const server = app.listen(3000, 'localhost', () => {
   const host = server.address().address;
   const port = server.address().port;
 

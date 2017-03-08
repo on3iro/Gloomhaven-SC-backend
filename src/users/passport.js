@@ -22,7 +22,6 @@ const localLogin = new Strategy(localOptions, (email, password, done) => {
               return done(null, user[0]);
             })
           .catch(val => {
-              console.log(val);
               return done(null, false, { message: incorrMessage });
             })
       }
@@ -44,7 +43,6 @@ const jwtLogin = new JwtStrategy(jwtOptions, (payload, done) => {
   User.get(payload.id).run()
     .then(
       user => {
-        console.log(user);
         if(!user) {
           return done(null, false, { message: incorrMessage });
         }

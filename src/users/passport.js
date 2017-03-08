@@ -39,8 +39,22 @@ const jwtOptions = {
   secretOrKey: config.get('secretKey'),
 };
 const jwtLogin = new JwtStrategy(jwtOptions, (payload, done) => {
-  console.log(payload);
-  done(null, false);
+  const incorrMessage = 'Invalid Token provided!';
+
+  User.get(payload.id).run()
+    .then(
+      user => {
+        console.log(user);
+        if(!user) {
+          return done(null, false, { message: incorrMessage });
+        }
+
+        return done(null, user);
+      }
+    )
+    .catch(err => {
+        return done(err);
+      });
 });
 
 passport.use(jwtLogin);

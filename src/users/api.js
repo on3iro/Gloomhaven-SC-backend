@@ -22,6 +22,6 @@ authRoutes.get('/login', (req, res) => {
 });
 authRoutes.post('/login', requireLogin, login);
 
-apiRoutes.get('/', (req, resp) => {
-  resp.send('Users');
+apiRoutes.get('/', requireAuth, (req, resp) => {
+  resp.send('Yeah, you are so authenticated...');
 });

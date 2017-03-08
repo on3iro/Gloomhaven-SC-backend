@@ -4,6 +4,15 @@ node_js:
 cache:
   directories:
     - node_modules
+sudo: required
+before_install:
+  - npm install node -g node-gyp
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - g++-5
 install:
   - npm install
 before_script:

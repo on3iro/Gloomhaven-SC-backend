@@ -5,11 +5,7 @@ import { login, register } from './auth';
 
 
 const requireAuth = passport.authenticate('jwt', { session: false });
-const requireLogin = passport.authenticate('local', {
-  successRedirect: '/login',
-  failureRedirect: '/api/auth/login',
-  session: false,
-});
+const requireLogin = passport.authenticate('local', { session: false });
 
 export const apiRoutes = express.Router();
 export const authRoutes = express.Router();

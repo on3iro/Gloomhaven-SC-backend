@@ -1,7 +1,6 @@
 import passport from 'passport';
 import { Strategy } from 'passport-local';
-import { ExtractJwt } from 'passport-jwt';
-import { JwtStrategy } from 'passport-jwt';
+import { ExtractJwt, Strategy as JwtStrategy } from 'passport-jwt';
 import config from 'config';
 
 import { User } from './models';
@@ -20,7 +19,7 @@ const localLogin = new Strategy(localOptions, (email, password, done) => {
 
         return authenticate(password, user[0].password)
           .then(val => {
-              return done(null, user);
+              return done(null, user[0]);
             })
           .catch(val => {
               console.log(val);
@@ -39,12 +38,12 @@ const jwtOptions = {
   // Look for secret
   secretOrKey: config.get('secretKey'),
 };
-// const jwtLogin = new JwtStrategy(jwtOptions, (payload, done) => {
-  // console.log(payload);
-  // done(null, false);
-// });
+const jwtLogin = new JwtStrategy(jwtOptions, (payload, done) => {
+  console.log(payload);
+  done(null, false);
+});
 
-// passport.use(jwtLogin);
+passport.use(jwtLogin);
 passport.use(localLogin);
 
 export default passport;

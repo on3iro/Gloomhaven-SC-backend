@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import config from 'config';
@@ -36,7 +36,7 @@ function generateToken(user) {
   });
 }
 
-function setUserInfo(user) {
+export function setUserInfo(user) {
   return {
     id: user.id,
     name: user.name,

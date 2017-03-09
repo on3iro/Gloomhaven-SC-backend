@@ -51,7 +51,7 @@
   },
   "homepage": "https://github.com/on3iro/Gloomhaven-SC-backend#readme",
   "dependencies": {
-    "bcrypt": "^1.0.2",
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.16.0",
     "config": "^1.25.1",
     "cors": "^2.8.1",

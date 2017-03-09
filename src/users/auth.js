@@ -32,7 +32,7 @@ export function authenticate(password, hash) {
 
 function generateToken(user) {
   return jwt.sign(user, config.get('secretKey'), {
-    expiresIn: 3600 // in seconds
+    expiresIn: 86400 // in seconds
   });
 }
 

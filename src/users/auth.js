@@ -82,7 +82,6 @@ export function register(req, res, next) {
 
   // Check if user with provided mail already exists
   return User.filter({ email: email }).run()
-    .catch(err => next(err))
     .then(userList => new Promise(
         (resolve, reject) => {
           if(userList.length > 0) {
@@ -93,12 +92,10 @@ export function register(req, res, next) {
         }
       )
     )
-    .catch(msg => res.status(422).send({ error: msg }))
     .then(
       // Check if username already exists
       () => User.filter({ name: name }).run()
     )
-    .catch(err => next(err))
     .then(userList => new Promise(
         (resolve, reject) => {
           if(userList.length > 0) {
@@ -108,7 +105,6 @@ export function register(req, res, next) {
           }
         }
       ))
-    .catch(msg => res.status(422).send({ error: msg }))
     .then(() => {
         const user = new User({
           name,
@@ -121,7 +117,6 @@ export function register(req, res, next) {
               return user.saveAll();
             });
       })
-    .catch(err => next(err))
     .then(user => {
         const userInfo = setUserInfo(user);
 
@@ -129,5 +124,6 @@ export function register(req, res, next) {
           token: 'JWT ' + generateToken(userInfo),
           user: userInfo
         });
-      });
+      })
+    .catch(msg => res.status(422).send({ error: msg }));
 }

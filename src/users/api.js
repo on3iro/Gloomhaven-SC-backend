@@ -4,8 +4,8 @@ import passport from 'passport';
 import { login, register } from './auth';
 
 
-const requireAuth = passport.authenticate('jwt', { session: false });
-const requireLogin = passport.authenticate('local', { session: false });
+export const requireAuth = passport.authenticate('jwt', { session: false });
+export const requireLogin = passport.authenticate('local', { session: false });
 
 export const apiRoutes = express.Router();
 export const authRoutes = express.Router();
@@ -20,6 +20,7 @@ authRoutes.post('/register', register);
 authRoutes.get('/login', (req, res) => {
   res.send('Please login');
 });
+
 authRoutes.post('/login', requireLogin, login);
 
 apiRoutes.get('/', requireAuth, (req, res) => {

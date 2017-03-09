@@ -40,7 +40,7 @@ app.use((error, req, res, next) => {
   next();
 });
 
-const server = app.listen(3000, 'localhost', () => {
+const server = app.listen(3030, 'localhost', () => {
   const host = server.address().address;
   const port = server.address().port;
 

@@ -137,5 +137,8 @@ jspm_packages
 # Yarn Integrity file
 .yarn-integrity
 
+# RethinkDB
+rethinkdb_data/**/*
+
 #===== Build ======#
 /dist/

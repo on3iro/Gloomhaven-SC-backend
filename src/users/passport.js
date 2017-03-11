@@ -19,10 +19,11 @@ const localLogin = new Strategy(localOptions, (email, password, done) => {
 
         return authenticate(password, user[0].password)
           .then(val => {
-              return done(null, user[0]);
-            })
-          .catch(val => {
-              return done(null, false, { message: incorrMessage });
+              if(val) {
+                return done(null, user[0]);
+              }else {
+                return done(null, false, { message: incorrMessage });
+              }
             })
       }
     )
